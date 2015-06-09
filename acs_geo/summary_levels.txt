@@ -1,0 +1,7 @@
+010,The United States
+040,States
+050,Counties
+140,Census Tracts
+160,Places
+310,Metropolitan and Micropolitan Areas
+860,5-Digit ZIP Code Tabulation Area
