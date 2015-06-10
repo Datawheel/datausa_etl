@@ -118,5 +118,5 @@ INSERT INTO attrs.geo_containment (
 );
 
 -- Create indicies after all data has been inserted
-CREATE INDEX census_geo_containment_idx_child_geoid ON tiger2012.census_geo_containment (child_geoid);
-CREATE INDEX census_geo_containment_idx_parent_geoid ON tiger2012.census_geo_containment (parent_geoid);
+CREATE INDEX attrs_geo_containment_idx_child_geoid ON attrs.geo_containment (child_geoid);
+CREATE INDEX attrs_geo_containment_idx_parent_geoid ON attrs.geo_containment (parent_geoid);
