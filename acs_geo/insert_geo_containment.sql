@@ -13,8 +13,8 @@ INSERT INTO attrs.geo_containment (
         '16000US' || place.geoid AS child_geoid,
         '05000US' || county.geoid AS parent_geoid,
         ST_Area(ST_Intersection(place.geom,county.geom))/ST_Area(place.geom)*100 as percent_covered
-    FROM tiger2012.place
-    JOIN tiger2012.county ON ST_Intersects(place.geom, county.geom)
+    FROM tiger2013.place
+    JOIN tiger2013.county ON ST_Intersects(place.geom, county.geom)
     WHERE
         ST_Area(ST_Intersection(place.geom,county.geom))/ST_Area(place.geom) > 0
     ORDER BY
@@ -27,8 +27,8 @@ INSERT INTO attrs.geo_containment (
         '86000US' || zcta5.geoid10 AS child_geoid,
         '05000US' || county.geoid AS parent_geoid,
         ST_Area(ST_Intersection(zcta5.geom,county.geom))/ST_Area(zcta5.geom)*100 as percent_covered
-    FROM tiger2012.zcta5
-    JOIN tiger2012.county ON ST_Intersects(zcta5.geom, county.geom)
+    FROM tiger2013.zcta5
+    JOIN tiger2013.county ON ST_Intersects(zcta5.geom, county.geom)
     WHERE
         ST_IsValid(zcta5.geom) AND
         ST_Area(ST_Intersection(zcta5.geom,county.geom))/ST_Area(zcta5.geom) > 0
@@ -43,8 +43,8 @@ INSERT INTO attrs.geo_containment (
         '16000US' || place.geoid AS child_geoid,
         '31000US' || cbsa.geoid AS parent_geoid,
         ST_Area(ST_Intersection(place.geom,cbsa.geom))/ST_Area(place.geom)*100 as percent_covered
-    FROM tiger2012.place
-    JOIN tiger2012.cbsa ON ST_Intersects(place.geom, cbsa.geom)
+    FROM tiger2013.place
+    JOIN tiger2013.cbsa ON ST_Intersects(place.geom, cbsa.geom)
     WHERE
         ST_IsValid(place.geom) AND
         ST_Area(ST_Intersection(place.geom,cbsa.geom))/ST_Area(place.geom) > 0
@@ -59,8 +59,8 @@ INSERT INTO attrs.geo_containment (
         '86000US' || zcta5.geoid10 AS child_geoid,
         '31000US' || cbsa.geoid AS parent_geoid,
         ST_Area(ST_Intersection(zcta5.geom,cbsa.geom))/ST_Area(zcta5.geom)*100 as percent_covered
-    FROM tiger2012.zcta5
-    JOIN tiger2012.cbsa ON ST_Intersects(zcta5.geom, cbsa.geom)
+    FROM tiger2013.zcta5
+    JOIN tiger2013.cbsa ON ST_Intersects(zcta5.geom, cbsa.geom)
     WHERE
         ST_IsValid(zcta5.geom) AND
         ST_Area(ST_Intersection(zcta5.geom,cbsa.geom))/ST_Area(zcta5.geom) > 0
@@ -75,8 +75,8 @@ INSERT INTO attrs.geo_containment (
         '86000US' || zcta5.geoid10 AS child_geoid,
         '04000US' || state.geoid AS parent_geoid,
         ST_Area(ST_Intersection(zcta5.geom,state.geom))/ST_Area(zcta5.geom)*100 as percent_covered
-    FROM tiger2012.zcta5
-    JOIN tiger2012.state ON ST_Intersects(zcta5.geom, state.geom)
+    FROM tiger2013.zcta5
+    JOIN tiger2013.state ON ST_Intersects(zcta5.geom, state.geom)
     WHERE
         ST_IsValid(zcta5.geom) AND
         ST_Area(ST_Intersection(zcta5.geom,state.geom))/ST_Area(zcta5.geom) > 0
@@ -91,8 +91,8 @@ INSERT INTO attrs.geo_containment (
         '31000US' || cbsa.geoid AS child_geoid,
         '04000US' || state.geoid AS parent_geoid,
         ST_Area(ST_Intersection(cbsa.geom,state.geom))/ST_Area(cbsa.geom)*100 as percent_covered
-    FROM tiger2012.cbsa
-    JOIN tiger2012.state ON ST_Intersects(cbsa.geom, state.geom)
+    FROM tiger2013.cbsa
+    JOIN tiger2013.state ON ST_Intersects(cbsa.geom, state.geom)
     WHERE
         ST_IsValid(cbsa.geom) AND
         ST_Area(ST_Intersection(cbsa.geom,state.geom))/ST_Area(cbsa.geom) > 0
@@ -107,8 +107,8 @@ INSERT INTO attrs.geo_containment (
         '14000US' || tract.geoid AS child_geoid,
         '16000US' || place.geoid AS parent_geoid,
         ST_Area(ST_Intersection(tract.geom,place.geom))/ST_Area(tract.geom)*100 as percent_covered
-    FROM tiger2012.tract
-    JOIN tiger2012.place ON ST_Intersects(tract.geom, place.geom)
+    FROM tiger2013.tract
+    JOIN tiger2013.place ON ST_Intersects(tract.geom, place.geom)
     WHERE
         ST_IsValid(tract.geom) AND
         ST_Area(ST_Intersection(tract.geom,place.geom))/ST_Area(tract.geom) > 0

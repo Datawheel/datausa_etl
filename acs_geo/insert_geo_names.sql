@@ -24,7 +24,7 @@ INSERT INTO attrs.geo_names
         10,
         state.aland,
         state.awater
-    FROM tiger2012.state
+    FROM tiger2013.state
     WHERE state.geoid NOT IN ('60', '66', '69', '78');
 -- PLACES
 INSERT INTO attrs.geo_names
@@ -38,7 +38,7 @@ INSERT INTO attrs.geo_names
         20,
         place.aland,
         place.awater
-    FROM tiger2012.place JOIN tiger2012.state USING (statefp)
+    FROM tiger2013.place JOIN tiger2013.state USING (statefp)
     WHERE state.geoid NOT IN ('60', '66', '69', '78');
 -- COUNTIES
 INSERT INTO attrs.geo_names
@@ -52,7 +52,7 @@ INSERT INTO attrs.geo_names
         30,
         county.aland,
         county.awater
-    FROM tiger2012.county JOIN tiger2012.state USING (statefp)
+    FROM tiger2013.county JOIN tiger2013.state USING (statefp)
     WHERE state.geoid NOT IN ('60', '66', '69', '78');
 -- ZIP CODES
 INSERT INTO attrs.geo_names
@@ -66,7 +66,7 @@ INSERT INTO attrs.geo_names
         50,
         zcta5.aland10,
         zcta5.awater10
-    FROM tiger2012.zcta5;
+    FROM tiger2013.zcta5;
 -- CBSA
 INSERT INTO attrs.geo_names
     SELECT
@@ -79,7 +79,7 @@ INSERT INTO attrs.geo_names
         60,
         cbsa.aland,
         cbsa.awater
-    FROM tiger2012.cbsa;
+    FROM tiger2013.cbsa;
 -- PUMAS
 INSERT INTO attrs.geo_names
     SELECT
@@ -92,7 +92,7 @@ INSERT INTO attrs.geo_names
         110,
         puma.aland10,
         puma.awater10
-    FROM tiger2012.puma JOIN tiger2012.state ON (puma.statefp10=state.statefp)
+    FROM tiger2013.puma JOIN tiger2013.state ON (puma.statefp10=state.statefp)
     WHERE statefp NOT IN ('60', '66', '69', '78');
 -- TRACTS
 INSERT INTO attrs.geo_names
@@ -106,7 +106,7 @@ INSERT INTO attrs.geo_names
         270,
         tract.aland,
         tract.awater
-    FROM tiger2012.tract JOIN tiger2012.county USING (statefp, countyfp) JOIN tiger2012.state USING (statefp)
+    FROM tiger2013.tract JOIN tiger2013.county USING (statefp, countyfp) JOIN tiger2013.state USING (statefp)
     WHERE statefp NOT IN ('60', '66', '69', '78');
 -- NATION (USA)
 INSERT INTO attrs.geo_names
@@ -118,5 +118,5 @@ INSERT INTO attrs.geo_names
         '010',
         '',
         5,
-        (SELECT SUM(aland) FROM tiger2012.state),
-        (SELECT SUM(awater) FROM tiger2012.state);
+        (SELECT SUM(aland) FROM tiger2013.state),
+        (SELECT SUM(awater) FROM tiger2013.state);

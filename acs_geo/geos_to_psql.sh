@@ -5,6 +5,16 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
+if [ -z "$datausa_etl_user" ]; then 
+  echo "datausa_etl_user is unset"
+  exit 1
+fi
+
+if [ -z "$datausa_etl_db" ]; then 
+  echo "datausa_etl_db is unset"
+  exit 1
+fi
+
 # create directory to store all data
 year=$1
 pwd=/${PWD#*/}
@@ -17,11 +27,11 @@ geos=(STATE COUNTY CBSA PLACE ZCTA5 PUMA TRACT)
 sum_levels=(040 050 310 160 860 795 140)
 
 # need postgis extension for storing geographic data about locations
-psql -d census_new -h localhost -q -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+psql -U $datausa_etl_user -d $datausa_etl_db -h localhost -q -c "CREATE EXTENSION IF NOT EXISTS postgis;"
 
 # create a schema for this year
-psql -d census_new -h localhost -q -c "CREATE SCHEMA IF NOT EXISTS tiger$year;"
-psql -d census_new -h localhost -q -c "ALTER SCHEMA tiger$year OWNER TO census;"
+psql -U $datausa_etl_user -d $datausa_etl_db -h localhost -q -c "CREATE SCHEMA IF NOT EXISTS tiger$year;"
+psql -U $datausa_etl_user -d $datausa_etl_db -h localhost -q -c "ALTER SCHEMA tiger$year OWNER TO $datausa_etl_user;"
 
 # looping through geo sumlevels
 for ((i = 0; i < ${#geos[@]}; i++))
@@ -55,6 +65,6 @@ do
     done
 
     # Then load them into postgres
-    psql -d census_new -h localhost -q -c "DROP TABLE IF EXISTS tiger$year.$current_geo;"
-    psql -d census_new -h localhost -q -f $current_geo.sql
+    psql -U $datausa_etl_user -d $datausa_etl_db -h localhost -q -c "DROP TABLE IF EXISTS tiger$year.$current_geo;"
+    psql -U $datausa_etl_user -d $datausa_etl_db -h localhost -q -f $current_geo.sql
 done
