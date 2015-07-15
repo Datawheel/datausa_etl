@@ -1,5 +1,5 @@
 import pandas as pd
-import requests
+import requests, sys
 
 API_URL="http://localhost:5000/1.0/data/show/{release}?table_ids={table_ids}&geo_ids={geoids}"
 def get_data(tables=None, geoids=None, release='latest'):
@@ -36,6 +36,8 @@ def prep_for_pandas(json_data,include_moe=False):
 
 def get_dataframe(tables=None, geoids=None, release='latest',geo_names=False,col_names=True,include_moe=False):
     response = get_data(tables=tables,geoids=geoids,release=release)
+    if 'error' in response:
+        return pd.DataFrame()
     frame = pd.DataFrame.from_dict(prep_for_pandas(response['data'],include_moe),orient='index')
     frame = frame[sorted(frame.columns.values)] # data not returned in order
     if geo_names:

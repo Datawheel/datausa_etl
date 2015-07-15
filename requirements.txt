@@ -6,3 +6,6 @@ requests
 six
 wsgiref
 ipython
+psycopg2
+sqlalchemy
+click
