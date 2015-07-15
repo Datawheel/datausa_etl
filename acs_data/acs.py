@@ -1,9 +1,11 @@
-import sys, time, click
+import os, sys, time, click
 import pandas as pd
 from helpers.get_dataframe import get_dataframe
 
 from sqlalchemy import create_engine
-engine = create_engine('postgresql://zeus@localhost:5432/census_new')
+db_user = os.getenv('datausa_etl_user')
+db_name = os.getenv('datausa_etl_db')
+engine = create_engine('postgresql://{}@localhost:5432/{}'.format(db_user, db_name))
 
 def compute_totals(df):
     names = [x.replace("_male", "").replace("_female", "") for x in df.columns if x not in ["name", "Total:", "Male:", "Female:"] and "_moe" not in x]
@@ -51,24 +53,6 @@ def format_dataframe(df, indicator):
         unwanted_cols = filter(lambda c: "male" in c.lower(), cols)
         df = df.drop(unwanted_cols, axis=1)
         cols = df.columns.tolist()
-        
-    
-    # cols_no_moe = filter(lambda c: "_moe" not in c, cols)
-    # cols_moe = filter(lambda c: "_moe" in c, cols)
-    
-    # df_no_moe = df.drop(cols_moe, axis=1)
-    # df_moe = df.drop(cols_no_moe, axis=1)
-    
-    # print df.columns.tolist()
-    
-    # df_moe.columns = cols_no_moe
-    #
-    # df_moe = df_moe.stack()
-    # df_moe.name = 'val_moe'
-    # df_no_moe = df_no_moe.stack()
-    # df_no_moe.name = 'val'
-    #
-    # return pd.concat([df_no_moe, df_moe], axis=1)
     
     return df
 
@@ -89,6 +73,7 @@ def add_new_data(indicator, sumlevel, year, year_est):
         sys.exit("No data for this sumlevel")
     
     df = format_dataframe(df, indicator)
+    # sys.exit(df.head())
     # sys.exit(df.columns.tolist())
     
     cols = []
@@ -111,38 +96,3 @@ def add_new_data(indicator, sumlevel, year, year_est):
     
 if __name__ == '__main__':
     add_new_data()
-    
-    # start = time.time()
-    #
-    # for indicator in indicators:
-    #     indicator_df = pd.DataFrame()
-    #     for sumlevel in sumlevels:
-    #         sumlevel_start = time.time()
-    #
-    #         geoids = '{}|01000US'.format(sumlevel)
-    #         df = get_dataframe(indicator, geoids=geoids, include_moe=True)
-    #         if df.empty:
-    #             print "No data for sumlevel: {}. Skipping...".format(sumlevel)
-    #             continue
-    #         df = format_dataframe(df, indicator)
-    #         # print df.loc[pd.IndexSlice[:,"Walked:"],"val"].order()
-    #         # print new_df.loc[idx[:,"Russia"],"val"].order()
-    #         # indicator_df = pd.concat([indicator_df, df])
-    #
-    #         df = df.reset_index()
-    #         df.columns = ['geoid', 'indicator_filter', 'val', 'val_moe']
-    #         df["year"] = 2010
-    #         df["indicator"] = indicator
-    #         df["sumlevel"] = sumlevel
-    #         df = df[['year', 'geoid', 'sumlevel', 'indicator', 'indicator_filter', 'val', 'val_moe']]
-    #         df.to_sql('acs', engine, schema='data', if_exists='append', index=False)
-    #
-    #         run_time = time.time() - sumlevel_start
-    #         m, s = divmod(run_time, 60)
-    #         h, m = divmod(m, 60)
-    #         print "%s sumlevel runtime: %d:%02d:%02d" % (sumlevel, h, m, s)
-    #
-    # total_run_time = (time.time() - start) / 60
-    # print; print;
-    # print "Total runtime: {0} minutes".format(int(total_run_time))
-    # print; print;

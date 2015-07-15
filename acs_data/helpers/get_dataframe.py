@@ -1,7 +1,9 @@
+import os
 import pandas as pd
 import requests, sys
 
-API_URL="http://localhost:5000/1.0/data/show/{release}?table_ids={table_ids}&geo_ids={geoids}"
+API_URL = os.getenv('datausa_etl_api')
+API_URL += "/1.0/data/show/{release}?table_ids={table_ids}&geo_ids={geoids}"
 def get_data(tables=None, geoids=None, release='latest'):
     if geoids is None:
         geoids = ['040|01000US']
